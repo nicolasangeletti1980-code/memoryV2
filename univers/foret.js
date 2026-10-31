@@ -15,7 +15,7 @@ UNIVERS.foret = {
     ombre: "63, 125, 58", voile: "47, 74, 34",
     dos: "linear-gradient(135deg, #7cb342, #33691e)",
     bouton: "linear-gradient(135deg, #e07a2e, #a0522d)",
-    modeActif: "#2f4a22", theme: "#cfe8c0",
+    theme: "#cfe8c0",
     tuile: "linear-gradient(135deg, #eef7e4, #bfe0a8)", texteTuile: "#2f4a22"
   },
   // Une feuille blanche au dos de chaque carte

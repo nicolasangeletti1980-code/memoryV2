@@ -16,7 +16,7 @@ UNIVERS.mer = {
     ombre: "30, 110, 180", voile: "11, 61, 99",
     dos: "linear-gradient(135deg, #4fc3f7, #1e6fc7)",
     bouton: "linear-gradient(135deg, #2ec4b6, #1e88c7)",
-    modeActif: "#1f5f99", theme: "#bdf0ff", tuile: "linear-gradient(135deg, #d6f7ff, #8fdcf7)", texteTuile: "#0b3d63"
+    theme: "#bdf0ff", tuile: "linear-gradient(135deg, #d6f7ff, #8fdcf7)", texteTuile: "#0b3d63"
   },
   // Les petites bulles blanches dessinées au dos de chaque carte
   dos: '<svg viewBox="0 0 100 100" fill="none" stroke="#fff" stroke-width="5" opacity="0.9">' +
@@ -36,7 +36,7 @@ UNIVERS.mer = {
     SONS.bulle(1100, 1, 0.35);
   },
 
-  // Les dessins des cartes (au moins 8, car le niveau 16 cartes en utilise 8)
+  // Les dessins des cartes (au moins 8, car une partie en utilise 8)
   cartes: (function () {
     // ===================================================================
     // LES DESSINS DES CARTES (repris de la première version)

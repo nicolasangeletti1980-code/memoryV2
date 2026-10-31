@@ -15,7 +15,7 @@ UNIVERS.ferme = {
     ombre: "190, 120, 40", voile: "107, 58, 31",
     dos: "linear-gradient(135deg, #ff8a65, #d84315)",
     bouton: "linear-gradient(135deg, #ffb300, #e8553e)",
-    modeActif: "#6b3a1f", theme: "#ffe6a8",
+    theme: "#ffe6a8",
     tuile: "linear-gradient(135deg, #fff6d9, #ffd98a)", texteTuile: "#6b3a1f"
   },
   // Une marguerite blanche au dos de chaque carte

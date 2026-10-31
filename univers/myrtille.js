@@ -16,7 +16,7 @@ UNIVERS.myrtille = {
     ombre: "155, 107, 255", voile: "91, 58, 140",
     dos: "linear-gradient(135deg, #ff9cd0, #b38cff)",
     bouton: "linear-gradient(135deg, #ff6fb5, #9b6bff)",
-    modeActif: "#1f5f99", theme: "#ffc2e2", tuile: "linear-gradient(135deg, #ffe3f1, #efe4ff)"
+    theme: "#ffc2e2", tuile: "linear-gradient(135deg, #ffe3f1, #efe4ff)"
   },
   // Le petit cœur blanc dessiné au dos de chaque carte
   dos: '<svg viewBox="0 0 100 100">' +
@@ -36,7 +36,7 @@ UNIVERS.myrtille = {
     [2093, 2637, 3136].forEach(function (f) { SONS.clochette(f, 0.8, 2, 0.08); });
   },
 
-  // Les dessins des cartes (au moins 8, car le niveau 16 cartes en utilise 8)
+  // Les dessins des cartes (au moins 8, car une partie en utilise 8)
   cartes: (function () {
     // ===================================================================
     // LES DESSINS DES CARTES (repris de la première version)

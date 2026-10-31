@@ -16,7 +16,7 @@ UNIVERS.dino = {
     ombre: "47, 120, 40", voile: "35, 82, 26",
     dos: "linear-gradient(135deg, #8fe05a, #2f9e44)",
     bouton: "linear-gradient(135deg, #ffb02e, #ff6b2c)",
-    modeActif: "#23521a", theme: "#d4f7b0", tuile: "linear-gradient(135deg, #f0ffd9, #c8f5a8)", texteTuile: "#23521a"
+    theme: "#d4f7b0", tuile: "linear-gradient(135deg, #f0ffd9, #c8f5a8)", texteTuile: "#23521a"
   },
   // L'empreinte de dinosaure dessinée au dos de chaque carte
   dos: '<svg viewBox="0 0 100 100" fill="#fff" opacity="0.9">' +
@@ -41,7 +41,7 @@ UNIVERS.dino = {
     SONS.rugissement(0.05, 1.7, 150, 0.2);
   },
 
-  // Les dessins des cartes (au moins 8, car le niveau 16 cartes en utilise 8)
+  // Les dessins des cartes (au moins 8, car une partie en utilise 8)
   cartes: (function () {
     // ===================================================================
     // LES DESSINS DES CARTES (repris de la première version)

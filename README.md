@@ -17,18 +17,18 @@ Il s'installe comme une appli et marche sans internet.
 Tous les dessins sont des SVG faits en code (aucune image à télécharger).
 Les sons et la musique sont fabriqués par le navigateur (aucun fichier son).
 
-## Les niveaux
+## Les parties
 
-- **8 cartes** (4 paires), **12 cartes** (6 paires), **16 cartes** (8 paires).
-- Les dessins sont tirés au hasard à chaque partie.
-- Le bouton de niveau montre une petite grille de points : on voit le nombre
-  de cartes sans savoir lire.
+- Chaque partie se joue avec **16 cartes** (8 paires).
+- Les cartes sont mélangées à chaque partie. Chaque univers a 8 dessins :
+  ils sont donc tous dans chaque partie. Si on ajoute des dessins à un univers,
+  le jeu en tire 8 au hasard.
 
 ## Ce qui est nouveau par rapport à la première version
 
 - Un seul moteur de jeu (`jeu.js`) pour tous les univers, au lieu d'une copie par jeu.
 - 3 univers de plus : la Ferme, la Forêt et le Zoo.
-- 3 niveaux au lieu de 2.
+- Toujours 16 cartes : plus de choix de niveau.
 - Un bouton **pause** : le chrono s'arrête et un voile cache les cartes.
   Le jeu se met aussi en pause tout seul quand on quitte l'appli.
 - Un chrono qui reste juste même si l'appareil ralentit la page.
@@ -51,7 +51,7 @@ Les sons et la musique sont fabriqués par le navigateur (aucun fichier son).
 ## Ajouter un univers
 
 1. Copier `univers/ferme.js` en `univers/nouveau.js` et changer l'`id`, les couleurs,
-   les sons et les 8 dessins (au moins 8, car le niveau 16 cartes en utilise 8).
+   les sons et les dessins (au moins 8, car une partie en utilise 8).
 2. Ajouter `<script src="univers/nouveau.js"></script>` dans `index.html` et `jeu.html`.
 3. Ajouter le nom dans la liste des tuiles de `index.html`.
 4. Ajouter le fichier dans `sw.js` et changer `NOM_COPIE`.

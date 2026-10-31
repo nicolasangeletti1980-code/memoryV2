@@ -16,7 +16,6 @@
   --voile: 91, 58, 140;     /* couleur du voile des fenêtres */
   --dos: linear-gradient(135deg, #ff9cd0, #b38cff);
   --bouton: linear-gradient(135deg, #ff6fb5, #9b6bff);
-  --mode-actif: #1f5f99;
   --blanc: #ffffff;
 }
 
@@ -227,53 +226,11 @@ h1 {
   transform: scale(0.95);
 }
 
-/* ===== Barre du bas : choix du niveau + bouton Rejouer ===== */
+/* ===== Barre du bas : le bouton Rejouer ===== */
 .commandes {
   display: flex;
-  align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 8px 10px;
   margin-top: 10px;
-}
-
-/* Les trois boutons de niveau collés les uns aux autres */
-.niveaux {
-  display: flex;
-  background: rgba(255, 255, 255, 0.75);
-  border: 2px solid var(--blanc);
-  border-radius: 30px;
-  padding: 3px;
-  box-shadow: 0 3px 8px rgba(var(--ombre), 0.2);
-}
-
-/* Un bouton de niveau : une petite grille de points + le nombre de cartes.
-   Même sans savoir lire, on voit qu'il y a plus ou moins de cartes. */
-.niveau {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: bold;
-  min-height: 48px;
-  padding: 0 10px;
-  border: none;
-  border-radius: 26px;
-  background: none;
-  color: var(--violet-fonce);
-  cursor: pointer;
-}
-
-.niveau svg {
-  width: 26px;
-  height: 26px;
-}
-
-/* Le niveau choisi est en couleur */
-.niveau[aria-pressed="true"] {
-  background: var(--bleu-clair);
-  color: var(--mode-actif);
 }
 
 /* ===== Les boutons ronds du bas ===== */

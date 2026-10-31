@@ -16,12 +16,11 @@
     return;
   }
 
-  // Les trois niveaux : le nombre de paires sur le plateau
-  // (4 paires = 8 cartes, 6 paires = 12 cartes, 8 paires = 16 cartes)
-  const NIVEAUX = [4, 6, 8];
+  // Chaque partie se joue avec 8 paires, soit 16 cartes
+  const PAIRES = 8;
 
   // ===================================================================
-  // 2. La mémoire du téléphone (niveau, records, son)
+  // 2. La mémoire du téléphone (records, son)
   // try/catch évite que le jeu plante si cette mémoire est bloquée.
   // ===================================================================
   function lireMemoire(cle) {
@@ -40,18 +39,11 @@
     }
   }
 
-  const CLE_NIVEAU = "memory-v2-niveau";
   const CLE_SON = "memory-v2-son";
 
-  // On reprend le dernier niveau choisi (8 cartes si rien n'est enregistré)
-  let paires = Number(lireMemoire(CLE_NIVEAU));
-  if (NIVEAUX.indexOf(paires) === -1) {
-    paires = NIVEAUX[0];
-  }
-
-  // Un record par univers et par niveau
+  // Un record par univers
   function cleRecord() {
-    return "memory-v2-record-" + U.id + "-" + paires;
+    return "memory-v2-record-" + U.id;
   }
 
   // On vérifie que le record lu est correct (sinon on l'ignore)
@@ -82,7 +74,6 @@
   style.setProperty("--voile", c.voile);
   style.setProperty("--dos", c.dos);
   style.setProperty("--bouton", c.bouton);
-  style.setProperty("--mode-actif", c.modeActif);
   document.querySelector('meta[name="theme-color"]').setAttribute("content", c.theme);
   document.title = U.titre.join(" ");
   document.getElementById("titre-1").textContent = U.titre[0];
@@ -165,36 +156,7 @@
   }
 
   // ===================================================================
-  // 8. Les boutons de niveau : une petite grille de points + le nombre
-  // ===================================================================
-  function dessinNiveau(nombreCartes) {
-    const rangees = nombreCartes / 4;
-    let points = "";
-    for (let r = 0; r < rangees; r++) {
-      for (let col = 0; col < 4; col++) {
-        points += '<rect x="' + (col * 6.5) + '" y="' + (r * 6.5) + '" width="5" height="5" rx="1.2"/>';
-      }
-    }
-    return '<svg viewBox="0 0 25 25" aria-hidden="true" fill="currentColor">' + points + "</svg>";
-  }
-
-  const zoneNiveaux = document.getElementById("niveaux");
-  NIVEAUX.forEach(function (n) {
-    const bouton = document.createElement("button");
-    bouton.className = "niveau";
-    bouton.dataset.paires = n;
-    bouton.setAttribute("aria-label", (n * 2) + " cartes");
-    bouton.innerHTML = dessinNiveau(n * 2) + "<span>" + (n * 2) + "</span>";
-    bouton.addEventListener("click", function () {
-      paires = n;
-      ecrireMemoire(CLE_NIVEAU, String(n));
-      nouvellePartie();
-    });
-    zoneNiveaux.appendChild(bouton);
-  });
-
-  // ===================================================================
-  // 9. Le record affiché en haut
+  // 8. Le record affiché en haut
   // ===================================================================
   function afficherRecord() {
     const record = lireRecord();
@@ -202,12 +164,12 @@
   }
 
   // ===================================================================
-  // 10. La taille des cartes
+  // 9. La taille des cartes
   // On essaie plusieurs nombres de colonnes et on garde celui qui donne
   // les plus grandes cartes dans la place disponible.
   // ===================================================================
   function ajusterPlateau() {
-    const nombre = paires * 2;
+    const nombre = PAIRES * 2;
     const largeur = zone.clientWidth;
     const hauteur = zone.clientHeight;
     const ecart = Math.min(largeur, hauteur) < 420 ? 8 : 12;
@@ -237,7 +199,7 @@
   }
 
   // ===================================================================
-  // 11. Les bruitages (le bouton 🔔)
+  // 10. Les bruitages (le bouton 🔔)
   // ===================================================================
   function afficherBoutonSon() {
     boutonSon.textContent = sonActif ? "🔔" : "🔕";
@@ -257,7 +219,7 @@
   afficherBoutonSon();
 
   // ===================================================================
-  // 12. Créer une nouvelle partie
+  // 11. Créer une nouvelle partie
   // ===================================================================
   function nouvellePartie() {
     clearTimeout(attente);      // annule un retournement encore en attente
@@ -278,13 +240,9 @@
     document.querySelectorAll(".confetti").forEach(function (el) { el.remove(); });
     afficherRecord();
 
-    // On allume le bouton du niveau choisi
-    document.querySelectorAll(".niveau").forEach(function (bouton) {
-      bouton.setAttribute("aria-pressed", String(Number(bouton.dataset.paires) === paires));
-    });
-
-    // On tire au hasard les dessins de la partie, puis on fait les paires
-    const choix = melanger(U.cartes.slice()).slice(0, paires);
+    // On prend 8 dessins (tirés au hasard si l'univers en a plus),
+    // on fait les paires, puis on mélange les 16 cartes
+    const choix = melanger(U.cartes.slice()).slice(0, PAIRES);
     const paquet = melanger(choix.concat(choix));
 
     plateau.innerHTML = "";
@@ -308,7 +266,7 @@
   }
 
   // ===================================================================
-  // 13. Quand on touche une carte
+  // 12. Quand on touche une carte
   // ===================================================================
   function toucherCarte(carte, modele) {
     // On ignore le toucher si on attend, si la partie est en pause ou
@@ -351,7 +309,7 @@
       pairesTrouvees++;
       annonce.textContent = "Paire trouvée : " + modele.nom;
 
-      if (pairesTrouvees === paires) {
+      if (pairesTrouvees === PAIRES) {
         victoire();
       } else if (sonActif) {
         U.sonPaire(modele);
@@ -372,7 +330,7 @@
   }
 
   // ===================================================================
-  // 14. La pause
+  // 13. La pause
   // ===================================================================
   function mettreEnPause() {
     if (etat !== "en-cours") return;
@@ -401,7 +359,7 @@
   });
 
   // ===================================================================
-  // 15. Pluie de confettis quand on gagne
+  // 14. Pluie de confettis quand on gagne
   // ===================================================================
   function lancerConfettis() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -419,7 +377,7 @@
   }
 
   // ===================================================================
-  // 16. Fin de partie
+  // 15. Fin de partie
   // ===================================================================
   function victoire() {
     etat = "fini";
@@ -468,13 +426,13 @@
   }
 
   // ===================================================================
-  // 17. Les boutons "Rejouer"
+  // 16. Les boutons "Rejouer"
   // ===================================================================
   document.getElementById("rejouer").addEventListener("click", nouvellePartie);
   document.getElementById("rejouer-victoire").addEventListener("click", nouvellePartie);
 
   // ===================================================================
-  // 18. Le décor qui flotte derrière le jeu
+  // 17. Le décor qui flotte derrière le jeu
   // ===================================================================
   const decor = document.getElementById("decor");
   for (let i = 0; i < 12; i++) {
@@ -496,7 +454,7 @@
   }
 
   // ===================================================================
-  // 19. On lance la première partie, la musique et le mode appli
+  // 18. On lance la première partie, la musique et le mode appli
   // ===================================================================
   nouvellePartie();
   initMusique(MELODIES[U.melodie], document.getElementById("bouton-musique"));

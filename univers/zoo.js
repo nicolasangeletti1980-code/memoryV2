@@ -15,7 +15,7 @@ UNIVERS.zoo = {
     ombre: "200, 120, 30", voile: "90, 52, 18",
     dos: "linear-gradient(135deg, #ffb74d, #e65100)",
     bouton: "linear-gradient(135deg, #16a085, #d35400)",
-    modeActif: "#5a3412", theme: "#ffe0b3",
+    theme: "#ffe0b3",
     tuile: "linear-gradient(135deg, #fff5e0, #ffd59a)", texteTuile: "#5a3412"
   },
   // Une empreinte de patte au dos de chaque carte
