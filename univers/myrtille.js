@@ -8,7 +8,7 @@ UNIVERS.myrtille = {
   nom: "Myrtille",
   titre: ["Memory", "de", "Myrtille"],
   accroche: "Mimi, nounours, hovawart…",
-  bravo: "Bravo Myrtille !",
+  bravo: "Ding ding ! Bravo Myrtille !",
   couleurs: {
     rose: "#ff6fb5", roseClair: "#ffd6ec", bleuClair: "#a9dcff",
     violet: "#9b6bff", violetFonce: "#5b3a8c", motDuMilieu: "#3aa0e8",
@@ -26,14 +26,19 @@ UNIVERS.myrtille = {
   melodie: "clairDeLune",
   confettis: ["💖", "💜", "💙", "⭐", "✨"],
   decor: ["💜", "💖", "⭐", "✨", "💙"],
-  // Paire trouvée : 3 petites notes de clochette qui montent (mi, sol, do)
-  sonPaire: function () {
-    [1318.5, 1568, 2093].forEach(function (f, i) { SONS.clochette(f, i * 0.07, 0.9, 0.15); });
+  // Les sons (même règle dans les 6 univers) :
+  // - paire trouvée : un petit motif de clochettes, sur la note propre à la carte ;
+  // - victoire : une cascade de clochettes qui monte, puis un accord (environ 2 s).
+  volumePaire: 0.17,
+  volumeVictoire: 0.148,
+  sonPaire: function (carte) {
+    const h = SONS.hauteur(this.cartes, carte), v = this.volumePaire;
+    [1046.5, 1318.5, 1568].forEach(function (f, i) { SONS.clochette(f * h, i * 0.07, 0.9, v); });
   },
-  // Victoire : une cascade de notes, puis un accord qui scintille
   sonVictoire: function () {
-    [1046.5, 1318.5, 1568, 2093, 2637, 3136].forEach(function (f, i) { SONS.clochette(f, i * 0.11, 1.2, 0.13); });
-    [2093, 2637, 3136].forEach(function (f) { SONS.clochette(f, 0.8, 2, 0.08); });
+    const v = this.volumeVictoire;
+    [1046.5, 1318.5, 1568, 2093, 2637, 3136].forEach(function (f, i) { SONS.clochette(f, i * 0.11, 1.2, v); });
+    [2093, 2637, 3136].forEach(function (f) { SONS.clochette(f, 0.8, 1.4, v * 0.6); });
   },
 
   // Les dessins des cartes (au moins 8, car une partie en utilise 8)

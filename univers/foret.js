@@ -7,7 +7,7 @@ UNIVERS.foret = {
   nom: "La Forêt",
   titre: ["Memory", "de la", "Forêt"],
   accroche: "Renard, hibou, champignon…",
-  bravo: "Hou hou ! Bravo !",
+  bravo: "Hou hou ! Bravo Myrtille !",
   couleurs: {
     rose: "#e07a2e", roseClair: "#ffe6cc", bleuClair: "#cfe8c0",
     violet: "#3f7d3a", violetFonce: "#2f4a22", motDuMilieu: "#a0522d",
@@ -24,17 +24,24 @@ UNIVERS.foret = {
     '<path d="M50 24 V92 M50 46 L64 36 M50 60 L66 50 M50 46 L36 36 M50 60 L34 50" stroke="#7cb342" stroke-width="3.5" stroke-linecap="round" fill="none"/>' +
     '</svg>',
   mascotte: "renard",
-  melodie: "clairDeLune",
+  melodie: "promenons",
   confettis: ["🍂", "🍄", "🌰", "⭐", "✨"],
   decor: ["🍃", "🍂", "🌰", "🍃", "🍄"],
-  // Paire trouvée : un petit oiseau chante deux fois
-  sonPaire: function () {
-    SONS.oiseau(1800, 0, 0.18);
-    SONS.oiseau(2200, 0.16, 0.18);
+  // Les sons (même règle dans les 6 univers) :
+  // - paire trouvée : un petit oiseau chante deux fois, sur la note propre à la carte ;
+  // - victoire : tout un concert d'oiseaux (environ 2 s).
+  volumePaire: 0.285,
+  volumeVictoire: 0.298,
+  sonPaire: function (carte) {
+    const h = SONS.hauteur(this.cartes, carte), v = this.volumePaire;
+    SONS.oiseau(1000 * h, 0, v);
+    SONS.oiseau(1300 * h, 0.16, v);
   },
-  // Victoire : tout un concert d'oiseaux
   sonVictoire: function () {
-    [1600, 2000, 1800, 2400, 2100, 2700, 2300, 3000].forEach(function (f, i) { SONS.oiseau(f, i * 0.13, 0.16); });
+    const v = this.volumeVictoire;
+    [1000, 1250, 1120, 1500, 1330, 1680, 1400, 1870, 1600, 2000, 1780, 2240].forEach(function (f, i) { SONS.oiseau(f, i * 0.13, v); });
+    SONS.oiseau(2240, 1.6, v);
+    SONS.oiseau(2660, 1.75, v);
   },
 
   // Les 8 dessins des cartes

@@ -46,6 +46,50 @@ const MELODIES = {
       "mi fa sol:2 mi fa sol:2 " +
       "sol:0.5 la:0.5 sol:0.5 fa:0.5 mi do sol:0.5 la:0.5 sol:0.5 fa:0.5 mi do " +
       "do sol_bas do:2 do sol_bas do:2 -:4"
+  },
+  // « Il était une bergère » (XVIIe siècle) — univers Ferme
+  // D'après la partition de l'article Wikipédia (do majeur, 6/8, tempo d'origine).
+  // Ici, 1 temps = une croche.
+  bergere: {
+    tempo: 180,
+    notes:
+      "sol_bas " +
+      "do:2 re mi:2 re do:3 sol_bas:2 sol_bas la_bas:2 la_bas " +
+      "sol_bas sol_bas sol_bas la_bas:2 la_bas sol_bas:2 sol_bas " +
+      "do:2 re mi:2 re do:3 sol_bas:2 sol " +
+      "mi:2 do re:2 si_bas do:2 do do:2 sol " +
+      "mi:2 do re:2 si_bas do:3 -:6"
+  },
+  // « Promenons-nous dans les bois » (XVIIe siècle) — univers Forêt
+  // D'après la partition de l'article Wikipédia, transposée en do majeur.
+  promenons: {
+    tempo: 100,
+    notes:
+      "mi:0.5 mi:0.5 " +
+      "do mi:0.5 mi:0.5 do mi:0.5 mi:0.5 " +
+      "do:0.5 sol_bas:0.5 mi:0.5 mi:0.5 do do:0.5 do:0.5 " +
+      "do do re do:0.5 do:0.5 re sol do do:0.5 do:0.5 " +
+      "do do re do:0.5 do:0.5 re sol do " +
+      "sol:0.5 sol:0.5 sol sol:0.5 sol:0.5 sol sol:0.5 sol:0.5 sol -:3"
+  },
+  // « Une souris verte » (fin XVIIe - XVIIIe siècle) — univers Zoo
+  // D'après la partition de l'article Wikipédia, transposée en do majeur
+  // (tempo d'origine : 78 noires par minute).
+  sourisVerte: {
+    tempo: 78,
+    notes:
+      "do:0.5 do:0.5 do:0.5 re:0.5 do sol_bas " +
+      "do:0.5 do:0.5 do:0.5 re:0.5 do sol_bas " +
+      "fa:0.5 mi:0.5 re:0.5 mi:0.5 fa:0.5 mi:0.5 re " +
+      "fa:0.5 mi:0.5 re:0.5 mi:0.5 fa:0.5 mi:0.5 re " +
+      "do:0.5 do:0.5 do:0.5 re:0.5 do sol_bas " +
+      "do:0.5 do:0.5 do:0.5 re:0.5 do sol_bas " +
+      "do:0.5 do:0.5 do:0.5 do:0.5 re " +
+      "do:0.5 do:0.5 re:0.5 do:0.5 re:0.5 sol:0.5 do sol do do:0.5 do:0.5 " +
+      "do:0.5 do:0.5 do:0.5 do:0.5 re " +
+      "do:0.5 do:0.5 do:0.5 do:0.5 do:0.5 do:0.5 re " +
+      "do:0.5 do:0.5 do:0.5 do:0.5 do:0.5 do:0.5 re " +
+      "do:0.5 do:0.5 do:0.5 do:0.5 re:0.5 sol:0.5 do:2 -:3"
   }
 };
 

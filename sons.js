@@ -172,20 +172,35 @@ const SONS = (function () {
     oscillateur.stop(t + 0.18);
   }
 
-  // ----- 6. Tambour (univers Zoo) : une note grave qui descend vite, "boum" -----
+  // ----- 6. Tambour (univers Zoo) : une note qui descend vite, "boum" -----
+  // Une 2e couche plus aiguë et très courte (la peau du tambour) permet
+  // d'entendre le tambour même sur le petit haut-parleur d'un téléphone.
   function tambour(frequence, debut, volume) {
     const t = audio.currentTime + debut;
-    const oscillateur = audio.createOscillator();
-    oscillateur.type = "sine";
-    oscillateur.frequency.setValueAtTime(frequence * 1.8, t);
-    oscillateur.frequency.exponentialRampToValueAtTime(frequence, t + 0.08);
-    oscillateur.connect(enveloppe(t, volume, 0.35));
-    oscillateur.start(t);
-    oscillateur.stop(t + 0.4);
+    [[1, volume, 0.35], [2.3, volume * 0.5, 0.08]].forEach(function (couche) {
+      const oscillateur = audio.createOscillator();
+      oscillateur.type = "sine";
+      oscillateur.frequency.setValueAtTime(frequence * couche[0] * 1.8, t);
+      oscillateur.frequency.exponentialRampToValueAtTime(frequence * couche[0], t + 0.08);
+      oscillateur.connect(enveloppe(t, couche[1], couche[2]));
+      oscillateur.start(t);
+      oscillateur.stop(t + couche[2] + 0.05);
+    });
+  }
+
+  // ----- La hauteur propre à chaque carte -----
+  // Chaque dessin a sa note : la 1re carte joue le son de base,
+  // les suivantes montent d'un degré de la gamme (do, ré, mi, fa, sol, la, si, do).
+  // Ainsi, chaque paire trouvée a son propre son, dans tous les univers.
+  const GAMME = [0, 2, 4, 5, 7, 9, 11, 12];
+  function hauteur(cartes, carte) {
+    const rang = Math.max(0, cartes.indexOf(carte)) % GAMME.length;
+    return Math.pow(2, GAMME[rang] / 12);
   }
 
   return {
     preparer: preparer,
+    hauteur: hauteur,
     // Chaque fonction ci-dessous vérifie d'abord que le son peut marcher
     clochette: function (f, d, duree, v) { if (preparer()) clochette(f, d, duree, v); },
     bulle: function (f, d, v) { if (preparer()) bulle(f, d, v); },

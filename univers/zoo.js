@@ -7,7 +7,7 @@ UNIVERS.zoo = {
   nom: "Le Zoo",
   titre: ["Memory", "du", "Zoo"],
   accroche: "Lion, éléphant, girafe…",
-  bravo: "Youpi ! Bravo !",
+  bravo: "Boum boum ! Bravo Myrtille !",
   couleurs: {
     rose: "#e67e22", roseClair: "#ffefd0", bleuClair: "#ffe0b3",
     violet: "#d35400", violetFonce: "#5a3412", motDuMilieu: "#16a085",
@@ -25,20 +25,24 @@ UNIVERS.zoo = {
     '<ellipse cx="60" cy="28" rx="8" ry="11"/><ellipse cx="76" cy="44" rx="8" ry="10"/>' +
     '</svg>',
   mascotte: "lion",
-  melodie: "frereJacques",
+  melodie: "sourisVerte",
   confettis: ["🎈", "🍌", "⭐", "🎉", "✨"],
   decor: ["🍌", "🌴", "🎈", "🍃", "⭐"],
-  // Paire trouvée : deux coups de tambour, "boum boum"
-  sonPaire: function () {
-    SONS.tambour(130, 0, 0.5);
-    SONS.tambour(170, 0.15, 0.5);
+  // Les sons (même règle dans les 6 univers) :
+  // - paire trouvée : deux coups de tambour, "boum boum", sur la note propre à la carte ;
+  // - victoire : un roulement de tambour qui accélère, puis deux grands "boum" (environ 2 s).
+  volumePaire: 0.316,
+  volumeVictoire: 0.336,
+  sonPaire: function (carte) {
+    const h = SONS.hauteur(this.cartes, carte), v = this.volumePaire;
+    SONS.tambour(196 * h, 0, v);
+    SONS.tambour(262 * h, 0.15, v);
   },
-  // Victoire : un roulement de tambour qui accélère, puis un grand "boum"
   sonVictoire: function () {
-    [0, 0.2, 0.36, 0.5, 0.62, 0.72, 0.8, 0.87].forEach(function (d, i) { SONS.tambour(140 + i * 8, d, 0.4); });
-    SONS.tambour(100, 1.05, 0.6);
-    SONS.xylophone(783.99, 1.05, 0.2);
-    SONS.xylophone(1046.5, 1.05, 0.2);
+    const v = this.volumeVictoire;
+    [0, 0.22, 0.42, 0.6, 0.75, 0.88, 0.98, 1.06, 1.13, 1.19].forEach(function (d, i) { SONS.tambour(220 + i * 10, d, v * 0.8); });
+    SONS.tambour(165, 1.4, v);
+    SONS.tambour(330, 1.4, v * 0.7);
   },
 
   // Les 8 dessins des cartes

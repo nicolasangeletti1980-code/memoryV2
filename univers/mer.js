@@ -8,7 +8,7 @@ UNIVERS.mer = {
   nom: "La Mer",
   titre: ["Memory", "de la", "Mer"],
   accroche: "Poissons, sirène, trident…",
-  bravo: "Splash ! Bravo !",
+  bravo: "Splash ! Bravo Myrtille !",
   couleurs: {
     rose: "#ff7f50", roseClair: "#ffe0d6", bleuClair: "#b8f0ff",
     violet: "#1e88c7", violetFonce: "#0b3d63", motDuMilieu: "#2ec4b6",
@@ -26,14 +26,19 @@ UNIVERS.mer = {
   melodie: "vousDiraiJe",
   confettis: ["🐚", "🐠", "💙", "⭐", "✨"],
   decor: ["bulle", "bulle", "bulle", "bulle", "🐠", "🐚"],
-  // Paire trouvée : 3 bulles de plus en plus aiguës
-  sonPaire: function () {
-    [380, 500, 650].forEach(function (f, i) { SONS.bulle(f, i * 0.09, 0.35); });
+  // Les sons (même règle dans les 6 univers) :
+  // - paire trouvée : trois bulles, sur la note propre à la carte ;
+  // - victoire : une remontée de bulles, puis un dernier "plop" bien aigu (environ 2 s).
+  volumePaire: 0.334,
+  volumeVictoire: 0.357,
+  sonPaire: function (carte) {
+    const h = SONS.hauteur(this.cartes, carte), v = this.volumePaire;
+    [380, 500, 650].forEach(function (f, i) { SONS.bulle(f * h, i * 0.09, v); });
   },
-  // Victoire : une remontée de bulles, puis un dernier "plop" bien aigu
   sonVictoire: function () {
-    [300, 420, 360, 520, 460, 640, 580, 780, 700, 900].forEach(function (f, i) { SONS.bulle(f, i * 0.08, 0.3); });
-    SONS.bulle(1100, 1, 0.35);
+    const v = this.volumeVictoire;
+    [300, 420, 360, 520, 460, 640, 580, 780, 700, 900, 820, 1000, 940, 1150].forEach(function (f, i) { SONS.bulle(f, i * 0.11, v); });
+    SONS.bulle(1300, 1.65, v * 1.2);
   },
 
   // Les dessins des cartes (au moins 8, car une partie en utilise 8)

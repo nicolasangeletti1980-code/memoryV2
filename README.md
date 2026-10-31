@@ -5,17 +5,32 @@ Il s'installe comme une appli et marche sans internet.
 
 ## Les six univers
 
-| Univers | Cartes | Bruitages | Comptine |
-|---|---|---|---|
-| Myrtille | myrtille, M, prénom, Mimi, hovawart, bonhomme de neige, 2 nounours | clochettes | Au clair de la lune |
-| La Mer | hippocampe, poisson clown, étoile de mer, coquille, poissons, sirène, trident | bulles | Ah ! vous dirai-je, maman |
-| Les Dinos | T-rex, tricératops, diplodocus, stégosaure, ptéranodon, ankylosaure, bébé dino, volcan | rugissements | Frère Jacques |
-| La Ferme | vache, cochon, poule, mouton, cheval, lapin, canard, tracteur | xylophone | Ah ! vous dirai-je, maman |
-| La Forêt | renard, hérisson, écureuil, hibou, faon, champignon, escargot, sapin | chants d'oiseaux | Au clair de la lune |
-| Le Zoo | lion, éléphant, girafe, zèbre, singe, panda, hippopotame, manchot | tambour | Frère Jacques |
+| Univers | Cartes | Bruitages | Comptine | Victoire |
+|---|---|---|---|---|
+| Myrtille | myrtille, M, prénom, Mimi, hovawart, bonhomme de neige, 2 nounours | clochettes | Au clair de la lune | Ding ding ! Bravo Myrtille ! |
+| La Mer | hippocampe, poisson clown, étoile de mer, coquille, poissons, sirène, trident | bulles | Ah ! vous dirai-je, maman | Splash ! Bravo Myrtille ! |
+| Les Dinos | T-rex, tricératops, diplodocus, stégosaure, ptéranodon, ankylosaure, bébé dino, volcan | rugissements | Frère Jacques | ROAAAR ! Bravo Myrtille ! |
+| La Ferme | vache, cochon, poule, mouton, cheval, lapin, canard, tracteur | xylophone | Il était une bergère | Cocorico ! Bravo Myrtille ! |
+| La Forêt | renard, hérisson, écureuil, hibou, faon, champignon, escargot, sapin | chants d'oiseaux | Promenons-nous dans les bois | Hou hou ! Bravo Myrtille ! |
+| Le Zoo | lion, éléphant, girafe, zèbre, singe, panda, hippopotame, manchot | tambour | Une souris verte | Boum boum ! Bravo Myrtille ! |
 
 Tous les dessins sont des SVG faits en code (aucune image à télécharger).
 Les sons et la musique sont fabriqués par le navigateur (aucun fichier son).
+Les six comptines sont traditionnelles (domaine public). Les trois nouvelles
+(*Il était une bergère*, *Promenons-nous dans les bois*, *Une souris verte*) sont
+transcrites note par note depuis les partitions des articles Wikipédia en français.
+
+## Les sons : la même règle dans les six univers
+
+- **Paire trouvée** : un court motif dans l'instrument de l'univers, sur une note
+  propre à chaque dessin (8 dessins = 8 notes de la gamme). Les dinosaures ont,
+  eux, chacun leur cri.
+- **Victoire** : un motif d'environ 2 secondes dans le même instrument, puis la fenêtre
+  « … Bravo Myrtille ! ».
+- **Même volume partout** : chaque son a été mesuré (volume perçu sur un haut-parleur
+  de téléphone) et réglé pour que les six univers sonnent aussi fort les uns que les
+  autres (moins de 1 dB d'écart). Les réglages sont `volumePaire` et `volumeVictoire`
+  en haut de chaque fichier `univers/*.js`.
 
 ## Les parties
 

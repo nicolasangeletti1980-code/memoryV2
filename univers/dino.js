@@ -8,7 +8,7 @@ UNIVERS.dino = {
   nom: "Les Dinos",
   titre: ["Memory", "des", "Dinos"],
   accroche: "T-rex, volcan, bébé dino…",
-  bravo: "ROAAAR ! Bravo !",
+  bravo: "ROAAAR ! Bravo Myrtille !",
   couleurs: {
     rose: "#ff8a2a", roseClair: "#ffe3c4", bleuClair: "#d4f7a8",
     violet: "#2f9e44", violetFonce: "#23521a", motDuMilieu: "#8a4fd8",
@@ -29,16 +29,22 @@ UNIVERS.dino = {
   melodie: "frereJacques",
   confettis: ["🦖", "🦕", "🥚", "🌋", "⭐"],
   decor: ["🍃", "🌿", "🦕", "🍃", "🥚"],
+  // Les sons (même règle dans les 6 univers) :
+  // - paire trouvée : le cri propre au dinosaure de la carte ;
+  // - victoire : le GRAND rugissement du T-rex, un grave + un plus aigu (environ 2 s).
+  volumePaire: 0.25,
+  volumeVictoire: 0.354,
   secousse: true,   // le plateau tremble pendant le rugissement de victoire
-  // Paire trouvée : le dinosaure de la carte pousse son cri
   sonPaire: function (carte) {
-    const cri = carte.cri || { hauteur: 110, duree: 0.8 };
-    SONS.rugissement(0, cri.duree, cri.hauteur, 0.25);
+    // "volume" corrige chaque cri : les cris très graves s'entendent moins
+    // sur un téléphone, on les monte un peu pour que tous sonnent aussi fort
+    const cri = carte.cri || { hauteur: 110, duree: 0.8, volume: 1 };
+    SONS.rugissement(0, cri.duree, cri.hauteur, this.volumePaire * (cri.volume || 1));
   },
-  // Victoire : le GRAND rugissement du T-rex (un grave + un plus aigu)
   sonVictoire: function () {
-    SONS.rugissement(0, 1.9, 90, 0.35);
-    SONS.rugissement(0.05, 1.7, 150, 0.2);
+    const v = this.volumeVictoire;
+    SONS.rugissement(0, 1.9, 90, v);
+    SONS.rugissement(0.05, 1.7, 150, v * 0.57);
   },
 
   // Les dessins des cartes (au moins 8, car une partie en utilise 8)
@@ -95,7 +101,7 @@ UNIVERS.dino = {
     const CARTES = [
       {
         id: "trex", nom: "Un T-rex", fond: "#e4ffd6",
-        cri: { hauteur: 110, duree: 0.8 },
+        cri: { hauteur: 110, duree: 0.8, volume: 1.445 },
         dessin:
           '<svg viewBox="0 0 100 100">' +
           avecContour(
@@ -123,7 +129,7 @@ UNIVERS.dino = {
       },
       {
         id: "triceratops", nom: "Un tricératops", fond: "#fff0dc",
-        cri: { hauteur: 170, duree: 0.5 },
+        cri: { hauteur: 170, duree: 0.5, volume: 1.109 },
         dessin:
           '<svg viewBox="0 0 100 100">' +
           // La grande collerette derrière la tête
@@ -144,7 +150,7 @@ UNIVERS.dino = {
       },
       {
         id: "diplodocus", nom: "Un diplodocus", fond: "#e0f0ff",
-        cri: { hauteur: 75, duree: 1 },
+        cri: { hauteur: 75, duree: 1, volume: 1.758 },
         dessin:
           '<svg viewBox="0 0 100 100">' +
           // Le très long cou (trait foncé épais puis trait clair par-dessus)
@@ -165,7 +171,7 @@ UNIVERS.dino = {
       },
       {
         id: "stegosaure", nom: "Un stégosaure", fond: "#f0e4ff",
-        cri: { hauteur: 140, duree: 0.6 },
+        cri: { hauteur: 140, duree: 0.6, volume: 1.274 },
         dessin:
           '<svg viewBox="0 0 100 100">' +
           // Les grandes plaques sur le dos
@@ -185,7 +191,7 @@ UNIVERS.dino = {
       },
       {
         id: "pteranodon", nom: "Un ptéranodon", fond: "#ffe3ea",
-        cri: { hauteur: 650, duree: 0.45 },
+        cri: { hauteur: 650, duree: 0.45, volume: 0.646 },
         dessin:
           '<svg viewBox="0 0 100 100">' +
           // Les deux grandes ailes
@@ -205,7 +211,7 @@ UNIVERS.dino = {
       },
       {
         id: "ankylosaure", nom: "Un ankylosaure", fond: "#fff6d6",
-        cri: { hauteur: 120, duree: 0.55 },
+        cri: { hauteur: 120, duree: 0.55, volume: 1.413 },
         dessin:
           '<svg viewBox="0 0 100 100">' +
           // La queue avec sa grosse massue au bout
@@ -230,7 +236,7 @@ UNIVERS.dino = {
       },
       {
         id: "bebe", nom: "Un bébé dinosaure dans son œuf", fond: "#e6ffe0",
-        cri: { hauteur: 520, duree: 0.3 },
+        cri: { hauteur: 520, duree: 0.3, volume: 0.668 },
         dessin:
           '<svg viewBox="0 0 100 100">' +
           // La tête du bébé qui sort de l'œuf
@@ -252,7 +258,7 @@ UNIVERS.dino = {
       },
       {
         id: "volcan", nom: "Un volcan rigolo", fond: "#ffe6dc",
-        cri: { hauteur: 50, duree: 1 },
+        cri: { hauteur: 50, duree: 1, volume: 2.213 },
         dessin:
           '<svg viewBox="0 0 100 100">' +
           // La fumée et les boules de lave qui sautent

@@ -7,7 +7,7 @@ UNIVERS.ferme = {
   nom: "La Ferme",
   titre: ["Memory", "de la", "Ferme"],
   accroche: "Vache, cochon, tracteur…",
-  bravo: "Cocorico ! Bravo !",
+  bravo: "Cocorico ! Bravo Myrtille !",
   couleurs: {
     rose: "#e8553e", roseClair: "#ffe1d6", bleuClair: "#ffe9a8",
     violet: "#c0392b", violetFonce: "#6b3a1f", motDuMilieu: "#e69a00",
@@ -28,18 +28,23 @@ UNIVERS.ferme = {
       '<circle cx="50" cy="50" r="11" fill="#ffd54f"/></svg>';
   })(),
   mascotte: "vache",
-  melodie: "vousDiraiJe",
+  melodie: "bergere",
   confettis: ["🌻", "🐔", "🐷", "⭐", "✨"],
   decor: ["🌻", "🌾", "🐣", "🌻", "🍎"],
-  // Paire trouvée : 3 notes de xylophone qui montent (do, mi, sol)
-  sonPaire: function () {
-    [523.25, 659.25, 783.99].forEach(function (f, i) { SONS.xylophone(f, i * 0.09, 0.3); });
+  // Les sons (même règle dans les 6 univers) :
+  // - paire trouvée : trois notes de xylophone, sur la note propre à la carte ;
+  // - victoire : une gamme de xylophone qui monte, puis un accord (environ 2 s).
+  volumePaire: 0.25,
+  volumeVictoire: 0.253,
+  sonPaire: function (carte) {
+    const h = SONS.hauteur(this.cartes, carte), v = this.volumePaire;
+    [523.25, 659.25, 783.99].forEach(function (f, i) { SONS.xylophone(f * h, i * 0.09, v); });
   },
-  // Victoire : une gamme qui monte, puis le do tout en haut
   sonVictoire: function () {
-    [523.25, 587.33, 659.25, 698.46, 783.99, 880, 987.77].forEach(function (f, i) { SONS.xylophone(f, i * 0.1, 0.28); });
-    SONS.xylophone(1046.5, 0.8, 0.3);
-    SONS.xylophone(1318.5, 0.8, 0.2);
+    const v = this.volumeVictoire;
+    [523.25, 587.33, 659.25, 698.46, 783.99, 880, 987.77, 1046.5].forEach(function (f, i) { SONS.xylophone(f, i * 0.12, v); });
+    [1046.5, 1318.5, 1568].forEach(function (f) { SONS.xylophone(f, 1.15, v * 0.7); });
+    [1046.5, 1318.5, 1568].forEach(function (f) { SONS.xylophone(f, 1.45, v * 0.7); });
   },
 
   // Les 8 dessins des cartes
