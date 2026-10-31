@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <!-- Cette ligne adapte la page à la largeur du téléphone (pas besoin de zoomer) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffc2e2">
+  <title>Les Memory de Myrtille</title>
+
+  <!-- Pour installer le jeu comme une appli sur l'écran d'accueil -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icone-192.png">
+  <link rel="apple-touch-icon" href="icone-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Memory">
+
+  <style>
+    /* ===== Réglages généraux ===== */
+    * {
+      box-sizing: border-box;   /* les tailles incluent les bordures */
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      /* Police arrondie, plus douce pour les enfants */
+      font-family: ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
+      /* Fond dégradé rose -> bleu clair -> violet clair */
+      background: linear-gradient(160deg, #ffd6ec 0%, #d9efff 50%, #e7dcff 100%);
+      color: #5b3a8c;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Contour bien visible quand on se déplace au clavier (ordinateur) */
+    a:focus-visible, button:focus-visible {
+      outline: 4px solid #5b3a8c;
+      outline-offset: 3px;
+    }
+
+    /* ===== Titre ===== */
+    h1 {
+      font-size: 1.8rem;
+      text-align: center;
+      line-height: 1.15;
+      margin: 8px 0 18px;
+      padding: 0 56px;   /* laisse la place au bouton de la musique */
+    }
+
+    .t-rose   { color: #ff6fb5; }
+    .t-bleu   { color: #3aa0e8; }
+    .t-violet { color: #9b6bff; }
+
+    /* ===== Les six univers : de grosses tuiles avec un dessin ===== */
+    .jeux {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);   /* 2 colonnes sur téléphone */
+      gap: 14px;
+      width: 100%;
+      max-width: 520px;
+    }
+
+    /* 3 colonnes sur tablette et ordinateur */
+    @media (min-width: 700px) {
+      .jeux {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 760px;
+      }
+    }
+
+    /* Une tuile : on la touche pour lancer l'univers */
+    .jeu {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 6px;
+      padding: 12px 8px;
+      border: 4px solid #fff;
+      border-radius: 24px;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 5px 14px rgba(155, 107, 255, 0.3);
+    }
+
+    .jeu:active {
+      transform: scale(0.97);
+    }
+
+    /* Le dessin du personnage, bien grand */
+    .jeu svg {
+      width: min(100%, 120px);
+      aspect-ratio: 1;
+      height: auto;
+      background: #fff;
+      border-radius: 20px;
+      padding: 8px;
+      /* Le personnage se dandine doucement */
+      animation: dandiner 1.6s ease-in-out infinite alternate;
+      animation-delay: var(--decalage, 0s);
+    }
+
+    @keyframes dandiner {
+      from { transform: rotate(-5deg) translateY(0); }
+      to   { transform: rotate(5deg) translateY(-4px); }
+    }
+
+    .jeu strong {
+      display: block;
+      font-size: 1.25rem;
+    }
+
+    .jeu span {
+      font-size: 0.85rem;
+      opacity: 0.85;
+    }
+
+    /* ===== Installer l'appli ===== */
+    .installer {
+      margin-top: 22px;
+      text-align: center;
+      max-width: 460px;
+    }
+
+    .bouton {
+      font-family: inherit;
+      font-size: 1.1rem;
+      font-weight: bold;
+      padding: 14px 28px;
+      border: 3px solid #fff;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #ff6fb5, #9b6bff);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(155, 107, 255, 0.4);
+    }
+
+    .aide {
+      font-size: 0.95rem;
+      line-height: 1.4;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 16px;
+      padding: 10px 14px;
+    }
+
+    /* ===== Le bouton rond de la musique, en haut à droite ===== */
+    .rond {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      background: rgba(255, 255, 255, 0.8);
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    .rond.eteint {
+      opacity: 0.55;
+    }
+
+    /* ===== Le décor qui flotte doucement derrière ===== */
+    .decor {
+      position: fixed;
+      inset: 0;
+      z-index: -1;            /* derrière tout le reste */
+      overflow: hidden;
+      pointer-events: none;   /* on ne peut pas le toucher */
+    }
+
+    .decor span {
+      position: absolute;
+      bottom: -60px;
+      opacity: 0.35;
+      animation: flotter linear infinite;
+    }
+
+    @keyframes flotter {
+      from { transform: translateY(0) rotate(0deg); }
+      to   { transform: translateY(-115vh) rotate(25deg); }
+    }
+
+    /* Si le téléphone demande moins d'animations, on les coupe */
+    @media (prefers-reduced-motion: reduce) {
+      .jeu svg, .decor span { animation: none; }
+    }
+
+    /* Ces éléments sont cachés tant que le JavaScript ne les montre pas */
+    .cache {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Le décor animé (rempli par le JavaScript) -->
+  <div class="decor" id="decor" aria-hidden="true"></div>
+
+  <!-- Le bouton pour couper / remettre la musique -->
+  <button class="rond" id="bouton-musique" aria-label="Couper la musique">🎵</button>
+
+  <h1>
+    <span class="t-rose">Les Memory</span><br>
+    <span class="t-bleu">de</span>
+    <span class="t-violet">Myrtille</span>
+  </h1>
+
+  <!-- Les six univers (les tuiles sont créées par le JavaScript) -->
+  <nav class="jeux" id="jeux" aria-label="Choisis un univers"></nav>
+
+  <!-- Installer le jeu comme une appli sur l'écran d'accueil -->
+  <div class="installer">
+    <!-- Bouton visible seulement si l'appareil sait installer tout seul
+         (Android, ordinateur avec Chrome ou Edge) -->
+    <button class="bouton cache" id="bouton-installer">📲 Installer l'appli</button>
+    <!-- Aide visible seulement sur iPhone / iPad -->
+    <p class="aide cache" id="aide-iphone">
+      📲 Pour installer l'appli : touche le bouton <strong>Partager</strong>
+      (le carré avec une flèche), puis <strong>« Sur l'écran d'accueil »</strong>.
+    </p>
+  </div>
+
+  <!-- La musique, les sons et les univers (pour avoir leurs dessins) -->
+  <script src="musique.js"></script>
+  <script src="sons.js"></script>
+  <script>const UNIVERS = {};</script>
+  <script src="univers/myrtille.js"></script>
+  <script src="univers/mer.js"></script>
+  <script src="univers/dino.js"></script>
+  <script src="univers/ferme.js"></script>
+  <script src="univers/foret.js"></script>
+  <script src="univers/zoo.js"></script>
+  <script>
+    // ===== 1. Les tuiles des six univers =====
+    // Chaque tuile montre le personnage de l'univers et mène à jeu.html?u=...
+    const jeux = document.getElementById("jeux");
+    ["myrtille", "mer", "dino", "ferme", "foret", "zoo"].forEach(function (id, i) {
+      const u = UNIVERS[id];
+      const personnage = u.cartes.find(function (c) { return c.id === u.mascotte; }) || u.cartes[0];
+      const tuile = document.createElement("a");
+      tuile.className = "jeu";
+      tuile.href = "jeu.html?u=" + id;
+      tuile.style.background = u.couleurs.tuile;
+      if (u.couleurs.texteTuile) {
+        tuile.style.color = u.couleurs.texteTuile;
+      }
+      tuile.style.setProperty("--decalage", (-i * 0.4) + "s");   // chacun bouge à son rythme
+      tuile.innerHTML = personnage.dessin +
+        "<div><strong>" + u.nom + "</strong><span>" + u.accroche + "</span></div>";
+      tuile.querySelector("svg").setAttribute("aria-hidden", "true");
+      jeux.appendChild(tuile);
+    });
+
+    // ===== 2. Le mode appli : le jeu marche même sans internet =====
+    // Le "service worker" est un petit programme qui garde une copie
+    // des jeux dans l'appareil.
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js").catch(function () {});
+    }
+
+    // Est-ce qu'on est déjà dans l'appli installée ?
+    const dejaInstalle =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      window.navigator.standalone === true;
+
+    // ===== 3. Le bouton "Installer" (Android, ordinateur avec Chrome/Edge) =====
+    // Le navigateur prévient quand l'installation est possible :
+    // on garde sa demande de côté et on affiche notre bouton.
+    let demandeInstallation = null;
+    const boutonInstaller = document.getElementById("bouton-installer");
+
+    window.addEventListener("beforeinstallprompt", function (evenement) {
+      evenement.preventDefault();
+      demandeInstallation = evenement;
+      boutonInstaller.classList.remove("cache");
+    });
+
+    boutonInstaller.addEventListener("click", function () {
+      if (demandeInstallation) {
+        demandeInstallation.prompt();   // ouvre la fenêtre "Installer ?"
+        demandeInstallation = null;
+        boutonInstaller.classList.add("cache");
+      }
+    });
+
+    // ===== 4. L'aide pour iPhone / iPad =====
+    // Sur iPhone, il n'y a pas de bouton automatique : on explique comment faire.
+    const estIphone = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (estIphone && !dejaInstalle) {
+      document.getElementById("aide-iphone").classList.remove("cache");
+    }
+
+    // ===== 5. Le décor : des petits symboles des univers qui flottent =====
+    const symboles = ["💜", "🐠", "🦕", "🌻", "🍂", "🍌", "⭐", "💖"];
+    const decor = document.getElementById("decor");
+    for (let i = 0; i < 12; i++) {
+      const element = document.createElement("span");
+      element.textContent = symboles[i % symboles.length];
+      element.style.fontSize = 18 + Math.random() * 22 + "px";            // taille au hasard
+      element.style.left = Math.random() * 95 + "vw";                      // position au hasard
+      element.style.animationDuration = 14 + Math.random() * 12 + "s";    // lent
+      element.style.animationDelay = -Math.random() * 20 + "s";           // déjà en route
+      decor.appendChild(element);
+    }
+
+    // ===== 6. La petite musique : « Ah ! vous dirai-je, maman » =====
+    initMusique(MELODIES.vousDiraiJe, document.getElementById("bouton-musique"));
+  </script>
+</body>
+</html>

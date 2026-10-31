@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <!-- Cette ligne adapte la page à la largeur du téléphone (pas besoin de zoomer) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffc2e2">
+  <title>Memory de Myrtille</title>
+
+  <!-- Pour installer le jeu comme une appli sur l'écran d'accueil -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icone-192.png">
+  <link rel="apple-touch-icon" href="icone-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Memory">
+
+  <link rel="stylesheet" href="jeu.css">
+</head>
+<body>
+
+  <!-- Le décor animé (rempli par le JavaScript) -->
+  <div class="decor" id="decor" aria-hidden="true"></div>
+
+  <!-- Le titre : ses trois mots sont écrits par le JavaScript selon l'univers -->
+  <h1>
+    <span class="t-rose" id="titre-1">Memory</span>
+    <span class="t-bleu" id="titre-2">de</span>
+    <span class="t-violet" id="titre-3">Myrtille</span>
+  </h1>
+
+  <!-- Compteur de coups, chrono et meilleur score -->
+  <div class="infos">
+    <div class="info">Coups<strong id="coups">0</strong></div>
+    <div class="info">Temps<strong id="temps">0:00</strong></div>
+    <div class="info">Record<strong id="record">–</strong></div>
+  </div>
+
+  <!-- La zone du plateau : les cartes sont ajoutées par le JavaScript -->
+  <main class="zone" id="zone">
+    <div class="plateau" id="plateau"></div>
+  </main>
+
+  <!-- Choix du niveau (8, 12 ou 16 cartes) et bouton Rejouer -->
+  <div class="commandes">
+    <div class="niveaux" id="niveaux" role="group" aria-label="Nombre de cartes"></div>
+    <button class="bouton" id="rejouer">Rejouer</button>
+  </div>
+
+  <!-- Les boutons ronds : accueil, pause, musique, bruitages -->
+  <div class="barre">
+    <a class="rond" href="index.html" aria-label="Retour à l'accueil">🏠</a>
+    <button class="rond" id="bouton-pause" aria-label="Mettre en pause" disabled>⏸️</button>
+    <button class="rond" id="bouton-musique" aria-label="Couper la musique">🎵</button>
+    <button class="rond" id="bouton-son" aria-label="Couper les bruitages">🔔</button>
+  </div>
+
+  <!-- Le voile de la pause : il cache les cartes et arrête le chrono -->
+  <div class="voile" id="pause" role="dialog" aria-modal="true" aria-labelledby="titre-pause">
+    <div class="boite">
+      <div class="grosse-icone" aria-hidden="true">⏸️</div>
+      <h2 id="titre-pause">En pause</h2>
+      <button class="bouton" id="reprendre">▶️ Reprendre</button>
+    </div>
+  </div>
+
+  <!-- La fenêtre qui s'affiche quand on a gagné -->
+  <div class="voile" id="victoire" role="dialog" aria-modal="true" aria-labelledby="titre-victoire">
+    <div class="boite">
+      <div class="mascotte" id="mascotte"></div>
+      <h2 id="titre-victoire">Bravo !</h2>
+      <p id="resultat"></p>
+      <p id="message-record"></p>
+      <button class="bouton" id="rejouer-victoire">Rejouer</button>
+    </div>
+  </div>
+
+  <!-- Une zone invisible : le téléphone lit à voix haute ce qui s'y écrit
+       (pour les personnes qui utilisent un lecteur d'écran) -->
+  <div class="pour-lecteur" id="annonce" aria-live="polite"></div>
+
+  <!-- Les fichiers du jeu, dans cet ordre :
+       la musique, les sons, les 6 univers, puis le moteur du jeu -->
+  <script src="musique.js"></script>
+  <script src="sons.js"></script>
+  <script>const UNIVERS = {};</script>
+  <script src="univers/myrtille.js"></script>
+  <script src="univers/mer.js"></script>
+  <script src="univers/dino.js"></script>
+  <script src="univers/ferme.js"></script>
+  <script src="univers/foret.js"></script>
+  <script src="univers/zoo.js"></script>
+  <script src="jeu.js"></script>
+</body>
+</html>

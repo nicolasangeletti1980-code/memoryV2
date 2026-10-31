@@ -1,0 +1,459 @@
+/* ===================================================================
+   jeu.css : l'apparence de la page de jeu.
+   Les couleurs changent selon l'univers : le JavaScript remplit les
+   variables ci-dessous (--rose, --violet…) avec celles de l'univers.
+   =================================================================== */
+
+:root {
+  --rose: #ff6fb5;
+  --rose-clair: #ffd6ec;
+  --bleu-clair: #a9dcff;
+  --violet: #9b6bff;
+  --violet-fonce: #5b3a8c;
+  --mot-milieu: #3aa0e8;
+  --fond: linear-gradient(160deg, #ffd6ec 0%, #d9efff 50%, #e7dcff 100%);
+  --ombre: 155, 107, 255;   /* couleur des ombres (rouge, vert, bleu) */
+  --voile: 91, 58, 140;     /* couleur du voile des fenêtres */
+  --dos: linear-gradient(135deg, #ff9cd0, #b38cff);
+  --bouton: linear-gradient(135deg, #ff6fb5, #9b6bff);
+  --mode-actif: #1f5f99;
+  --blanc: #ffffff;
+}
+
+/* ===== Réglages généraux ===== */
+* {
+  box-sizing: border-box;   /* les tailles incluent les bordures */
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  /* Police arrondie, plus douce pour les enfants */
+  font-family: ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
+  background: var(--fond);
+  color: var(--violet-fonce);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* 100dvh = toute la hauteur visible de l'écran du téléphone */
+  height: 100vh;
+  height: 100dvh;
+  padding: 10px 12px max(10px, env(safe-area-inset-bottom));
+  overflow: hidden;
+  /* Empêche la sélection de texte et le zoom par double-tap */
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Contour bien visible quand on se déplace au clavier (ordinateur) */
+button:focus-visible, a:focus-visible {
+  outline: 4px solid var(--violet-fonce);
+  outline-offset: 3px;
+}
+
+/* ===== Titre ===== */
+h1 {
+  font-size: 1.6rem;
+  margin: 2px 0 8px;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.t-rose   { color: var(--rose); }
+.t-violet { color: var(--violet); }
+.t-bleu   { color: var(--mot-milieu); }
+
+/* ===== Barre avec le compteur de coups, le chrono et le record ===== */
+.infos {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 520px;
+  margin-bottom: 8px;
+}
+
+.info {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.75);
+  border: 2px solid var(--blanc);
+  border-radius: 16px;
+  padding: 4px;
+  text-align: center;
+  font-size: 0.85rem;
+  box-shadow: 0 3px 8px rgba(var(--ombre), 0.2);
+}
+
+.info strong {
+  display: block;
+  white-space: nowrap;
+  font-size: clamp(0.95rem, 4.6vw, 1.25rem);
+  color: var(--violet-fonce);
+}
+
+/* ===== La zone du plateau : elle prend toute la place qui reste ===== */
+.zone {
+  flex: 1;
+  min-height: 0;          /* permet à la zone de rétrécir */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* La grille de cartes : le JavaScript choisit le nombre de colonnes
+   et la taille des cartes pour qu'elles soient les plus grandes possible */
+.plateau {
+  display: grid;
+  gap: var(--ecart, 10px);
+}
+
+/* ===== Une carte ===== */
+.carte {
+  width: var(--taille, 80px);
+  height: var(--taille, 80px);
+  perspective: 600px;       /* donne l'effet 3D au retournement */
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+/* La carte s'enfonce un peu sous le doigt */
+.carte:active {
+  transform: scale(0.94);
+}
+
+/* La partie qui tourne (elle contient le dos et la face) */
+.carte-interieur {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.45s;
+  transform-style: preserve-3d;
+}
+
+/* Quand la carte a la classe "retournee", on la fait pivoter */
+.carte.retournee .carte-interieur {
+  transform: rotateY(180deg);
+}
+
+/* Le dos et la face sont l'un sur l'autre */
+.dos, .face {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;          /* on ne voit pas l'arrière */
+  -webkit-backface-visibility: hidden;
+  border: 3px solid var(--blanc);
+  box-shadow: 0 4px 10px rgba(var(--ombre), 0.3);
+}
+
+/* Dos de la carte : dégradé de l'univers avec des petits pois */
+.dos {
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.35) 2px, transparent 2.5px),
+    var(--dos);
+  background-size: 14px 14px, 100% 100%;
+}
+
+.dos svg {
+  width: 42%;
+  height: 42%;
+}
+
+/* Face de la carte (avec le dessin) */
+.face {
+  transform: rotateY(180deg);
+  padding: 6%;
+}
+
+.face svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Carte trouvée : contour coloré et petit saut de joie */
+.carte.trouvee .face {
+  border-color: var(--rose);
+  animation: saut 0.5s ease 0.45s;
+}
+
+/* À la victoire, toutes les cartes sautent l'une après l'autre */
+.carte.trouvee.danse .face {
+  animation: saut 0.5s ease var(--retard) 2;
+}
+
+@keyframes saut {
+  0%, 100% { transform: rotateY(180deg) scale(1); }
+  50%      { transform: rotateY(180deg) scale(1.12); }
+}
+
+/* Le plateau tremble (rugissement des dinosaures) */
+.secousse {
+  animation: secousse 0.1s linear 8;
+}
+
+@keyframes secousse {
+  0%, 100% { transform: translate(0, 0); }
+  25%      { transform: translate(-4px, 2px); }
+  75%      { transform: translate(4px, -2px); }
+}
+
+/* ===== Boutons ===== */
+.bouton {
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: bold;
+  min-height: 52px;
+  padding: 0 28px;
+  border: 3px solid var(--blanc);
+  border-radius: 30px;
+  background: var(--bouton);
+  color: var(--blanc);
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(var(--ombre), 0.4);
+}
+
+.bouton:active {
+  transform: scale(0.95);
+}
+
+/* ===== Barre du bas : choix du niveau + bouton Rejouer ===== */
+.commandes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-top: 10px;
+}
+
+/* Les trois boutons de niveau collés les uns aux autres */
+.niveaux {
+  display: flex;
+  background: rgba(255, 255, 255, 0.75);
+  border: 2px solid var(--blanc);
+  border-radius: 30px;
+  padding: 3px;
+  box-shadow: 0 3px 8px rgba(var(--ombre), 0.2);
+}
+
+/* Un bouton de niveau : une petite grille de points + le nombre de cartes.
+   Même sans savoir lire, on voit qu'il y a plus ou moins de cartes. */
+.niveau {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: bold;
+  min-height: 48px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 26px;
+  background: none;
+  color: var(--violet-fonce);
+  cursor: pointer;
+}
+
+.niveau svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* Le niveau choisi est en couleur */
+.niveau[aria-pressed="true"] {
+  background: var(--bleu-clair);
+  color: var(--mode-actif);
+}
+
+/* ===== Les boutons ronds du bas ===== */
+.barre {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.rond {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 3px solid var(--blanc);
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.rond:active {
+  transform: scale(0.9);
+}
+
+/* Bouton éteint (musique ou bruitages coupés) ou pas encore utilisable */
+.rond.eteint, .rond:disabled {
+  opacity: 0.45;
+}
+
+.rond:disabled {
+  cursor: default;
+}
+
+/* ===== Les fenêtres (pause et victoire) ===== */
+.voile {
+  position: fixed;
+  inset: 0;
+  background: rgba(var(--voile), 0.55);
+  display: none;               /* cachée au départ */
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 10;
+}
+
+/* La pause cache complètement les cartes (voile opaque) */
+#pause {
+  background: rgb(var(--voile));
+}
+
+.voile.visible {
+  display: flex;
+}
+
+.boite {
+  background: var(--blanc);
+  border: 4px solid var(--rose-clair);
+  border-radius: 24px;
+  padding: 24px;
+  text-align: center;
+  width: 100%;
+  max-width: 340px;
+  animation: apparition 0.4s ease;
+}
+
+@keyframes apparition {
+  from { transform: scale(0.6); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.boite h2 {
+  font-size: 1.7rem;
+  margin-bottom: 12px;
+  color: var(--rose);
+}
+
+.boite p {
+  margin: 6px 0;
+  font-size: 1.05rem;
+}
+
+.boite .bouton {
+  margin-top: 14px;
+}
+
+.grosse-icone {
+  font-size: 3.5rem;
+  margin-bottom: 6px;
+}
+
+/* Le personnage qui saute au-dessus du message de victoire */
+.mascotte {
+  width: 130px;
+  height: 130px;
+  margin: -80px auto 0;
+  animation: bondir 0.45s ease-in-out infinite alternate;
+}
+
+.mascotte svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes bondir {
+  from { transform: translateY(0) rotate(-4deg); }
+  to   { transform: translateY(-12px) rotate(4deg); }
+}
+
+.record {
+  color: var(--violet);
+  font-weight: bold;
+}
+
+/* ===== Le décor qui flotte doucement derrière le jeu ===== */
+.decor {
+  position: fixed;
+  inset: 0;
+  z-index: -1;            /* derrière tout le reste */
+  overflow: hidden;
+  pointer-events: none;   /* on ne peut pas le toucher */
+}
+
+.decor span {
+  position: absolute;
+  bottom: -60px;
+  opacity: 0.35;
+  animation: flotter linear infinite;
+}
+
+/* Une bulle dessinée (pour la mer) */
+.decor .bulle-decor {
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+@keyframes flotter {
+  from { transform: translateY(0) rotate(0deg); }
+  to   { transform: translateY(-115vh) rotate(25deg); }
+}
+
+/* ===== Confettis qui tombent à la victoire ===== */
+.confetti {
+  position: fixed;
+  top: -40px;
+  font-size: 22px;
+  pointer-events: none;   /* on peut toucher "à travers" */
+  z-index: 20;
+  animation: chute linear forwards;
+}
+
+@keyframes chute {
+  to { transform: translateY(110vh) rotate(360deg); }
+}
+
+/* Texte lu par le lecteur d'écran, mais invisible à l'écran */
+.pour-lecteur {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Écran très bas (téléphone couché) : on gagne de la place */
+@media (max-height: 520px) {
+  h1 { font-size: 1.2rem; margin-bottom: 4px; }
+  .infos { margin-bottom: 4px; }
+  .info { font-size: 0.75rem; padding: 2px; }
+  .commandes, .barre { margin-top: 6px; }
+}
+
+/* Si le téléphone demande moins d'animations, on les coupe */
+@media (prefers-reduced-motion: reduce) {
+  .carte-interieur { transition: none; }
+  .carte.trouvee .face, .boite, .mascotte, .carte.trouvee.danse .face, .decor span, .secousse { animation: none; }
+  .confetti { display: none; }
+}
